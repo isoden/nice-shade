@@ -1,9 +1,11 @@
 import { useMemo, useState } from 'react'
 import { hex2hsb, hsb2hex } from './colors'
-import { Box } from './_components/Box'
+import { Palette } from './_components/Palette'
 
+const MIN_BRIGHTNESS = 0
 const MAX_BRIGHTNESS = 100
 const MIN_SATURATION = 0
+const MAX_SATURATION = 100
 
 const MIN_AMOUNT = 3
 const MAX_AMOUNT = 20
@@ -24,10 +26,23 @@ export function App() {
     // 明度 (input.b → 100 までの量)
     (MAX_BRIGHTNESS - input.b)
 
-  const steps = Array.from(Array(amount), (_, i) => (diff / (amount - 1)) * i)
+  const colors = Array.from(Array(amount), (_, i) => {
+    const step = (diff / (amount - 1)) * i
+    const s = clamp(
+      input.s - Math.max(0, step - (MAX_BRIGHTNESS - input.b)),
+      MIN_SATURATION,
+      MAX_SATURATION,
+    )
+    const b = clamp(input.b + step, MIN_BRIGHTNESS, MAX_BRIGHTNESS)
+
+    return hsb2hex(input.h, s, b)
+  })
+    // FIXME: 色変換時に浮動小数点数の誤差でカラーコードがずれることがあるので、 先頭と末尾は固定値にする。 直せたら直したいけど bignumber.js を使う、とかになりそう。
+    .with(-1, '#ffffff')
+    .with(0, color)
 
   return (
-    <div className="container mx-auto">
+    <div className="container mx-auto grid max-h-screen grid-rows-[repeat(2,min-content),1fr] gap-4">
       <header className="flex items-center border-b p-4">
         <h1 className="font-bold">Nice shade</h1>
         <a
@@ -38,8 +53,8 @@ export function App() {
         </a>
       </header>
 
-      <main>
-        <form className="mt-4 flex flex-col gap-1 rounded bg-slate-100 p-4">
+      <main className="mt-4 contents flex-col">
+        <form className="flex flex-wrap gap-4 rounded bg-slate-100 p-4">
           <label>
             Select color:
             <input
@@ -67,24 +82,14 @@ export function App() {
           </label>
         </form>
 
-        <ol className="mt-4 flex flex-col">
-          {/* FIXME: 色変換時の浮動小数点数の誤差でカラーコードがずれることがあるので、 先頭と末尾は固定値 <Box /> を配置する。
-              直せたら直したい。けど bignumber.js を使う、とかになりそう。 */}
-          <Box hex="#ffffff" />
-          {steps
-            .slice(1, -1)
-            .map((step) => {
-              const h = input.h
-              const s = input.s - Math.max(0, step - (MAX_BRIGHTNESS - input.b))
-              const b = Math.min(MAX_BRIGHTNESS, input.b + step)
-              const hex = hsb2hex(h, s, b)
-
-              return <Box key={hex} hex={hex} />
-            })
-            .toReversed()}
-          <Box hex={color} />
-        </ol>
+        <div className="overflow-y-auto">
+          <Palette colors={colors.toReversed()} />
+        </div>
       </main>
     </div>
   )
+}
+
+function clamp(x: number, lower: number, upper: number): number {
+  return Math.max(lower, Math.min(x, upper))
 }

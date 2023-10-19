@@ -1,15 +1,22 @@
-export function Box({ hex }: { hex: string }) {
+export function Box({
+  color,
+}: {
+  /**
+   * カラーコード
+   */
+  color: string
+}) {
   return (
-    <li key={hex} style={{ background: hex }}>
+    <li key={color} style={{ background: color }}>
       <button
         className="w-full py-2.5"
         onClick={async () => {
-          await navigator.clipboard.writeText(hex)
+          await navigator.clipboard.writeText(color)
         }}
         type="button"
-        title="クリップボードにコピー"
+        title="Copy to clipboard"
       >
-        <span className="bg-white/40 font-mono">{hex}</span>
+        <span className="bg-white/40 font-mono">{color}</span>
       </button>
     </li>
   )

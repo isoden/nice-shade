@@ -15,4 +15,10 @@ module.exports = {
       { allowConstantExport: true },
     ],
   },
+  overrides: [
+    {
+      files: ['**/?(*.)+spec.ts?(x)'],
+      extends: ['plugin:testing-library/react', 'plugin:jest-dom/recommended'],
+    },
+  ],
 }

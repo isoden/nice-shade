@@ -28,8 +28,14 @@ export function App() {
 
   return (
     <div className="container mx-auto">
-      <header className="border-b p-4">
+      <header className="flex items-center border-b p-4">
         <h1 className="font-bold">Nice shade</h1>
+        <a
+          className="ml-auto text-sm"
+          href="https://github.com/isoden/nice-shade"
+        >
+          GitHub
+        </a>
       </header>
 
       <main>

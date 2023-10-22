@@ -15,3 +15,13 @@ test(async () => {
   expect(orderedListItem[1]).toHaveTextContent('#ff85ae')
   expect(orderedListItem[2]).toHaveTextContent('#cc3366')
 })
+
+test(async () => {
+  // arrange: カラーコードの重複
+  render(<Palette colors={['#ffffff', '#ffffff', '#ffffff']} />)
+
+  const orderedListItem = screen.getAllByRole('listitem')
+
+  // assert: 重複する値をすべて表示する
+  expect(orderedListItem).toHaveLength(3)
+})

@@ -19,7 +19,7 @@ export function hsb2hex(h: number, s: number, b: number): string {
 export function hex2hsb(hex: string): [h: number, s: number, b: number] {
   let [r, g, b] = hex
     .slice(1)
-    .match(/[0-9a-f]{2}/gi)!
+    .match(/[\da-f]{2}/gi)!
     .map((hex) => Number.parseInt(hex, 16))
 
   r /= 255
@@ -38,4 +38,14 @@ export function hex2hsb(hex: string): [h: number, s: number, b: number] {
       : 4 + (r - g) / n
 
   return [60 * (h < 0 ? h + 6 : h), v && (n / v) * 100, v * 100]
+}
+
+export function parseHex(hex: string): string | false {
+  if (!/^#?(?:[a-f\d]{3}){1,2}$/i.test(hex)) return false
+
+  if (hex.length > 5) return `#${hex}`.replace(/^#+/, '#')
+
+  const [r, g, b] = hex.replace('#', '').split('')
+
+  return `#${r}${r}${g}${g}${b}${b}`
 }

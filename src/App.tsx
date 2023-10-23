@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { hex2hsb, hsb2hex } from './colors'
+import { hex2hsb, hsb2hex, parseHex } from './colors'
 import { Palette } from './_components/Palette'
 
 const MIN_BRIGHTNESS = 0
@@ -96,6 +96,26 @@ export function App() {
               onChange={(event) => setColor(event.target.value)}
             />
           </label>
+
+          {/* TODO: design */}
+          <button
+            type="button"
+            onClick={() => {
+              const input = window.prompt('Paste color code as hex number')
+
+              // Canceled
+              if (input == null) return
+
+              const hex = parseHex(input.trim())
+
+              // Invalid format
+              if (!hex) return alert('Invalid format.')
+
+              setColor(hex)
+            }}
+          >
+            Paste color code
+          </button>
         </form>
 
         <div className="grid grid-cols-3 gap-4 overflow-y-auto">

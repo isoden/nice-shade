@@ -8,7 +8,7 @@ const MIN_SATURATION = 0
 const MAX_SATURATION = 100
 
 const MIN_AMOUNT = 3
-const MAX_AMOUNT = 20
+const MAX_AMOUNT = 40
 
 export function App() {
   const [color, setColor] = useState('#003e70')

@@ -1,6 +1,11 @@
+import type { MetaFunction } from '@remix-run/node'
 import { useMemo, useState } from 'react'
-import { hex2hsb, hsb2hex, parseHex } from './colors'
-import { Palette } from './_components/Palette'
+import { hex2hsb, hsb2hex, parseHex } from '~/colors'
+import { Palette } from '~/_components/Palette'
+
+export const meta: MetaFunction = () => {
+  return [{ title: 'Nice shade' }]
+}
 
 const MIN_BRIGHTNESS = 0
 const MAX_BRIGHTNESS = 100
@@ -10,7 +15,7 @@ const MAX_SATURATION = 100
 const MIN_AMOUNT = 3
 const MAX_AMOUNT = 40
 
-export function App() {
+export default function Index() {
   const [color, setColor] = useState('#003e70')
   const [amount1, setAmount1] = useState(10)
   const [amount2, setAmount2] = useState(10)
